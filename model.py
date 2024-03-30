@@ -269,7 +269,6 @@ print("model prediction is ",pred_label)
 
 
 import matplotlib.pyplot as plt
-get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # In[ ]:
