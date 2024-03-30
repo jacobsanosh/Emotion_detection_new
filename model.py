@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')  # Set the backend to 'Agg' for non-interactive plotting
 from keras.models import model_from_json
 import numpy as np
 from keras.utils import to_categorical 
@@ -103,9 +105,9 @@ model.add(Dense(7, activation='softmax'))
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model with augmented data and monitor metrics
-history = model.fit(datagen.flow(x=train_features, y=y_train, batch_size=128), epochs=64, validation_data=(test_features, y_test))
+history = model.fit(datagen.flow(x=train_features, y=y_train, batch_size=128), epochs=100, validation_data=(test_features, y_test))
 
-# Plot training and validation metrics
+# Plot training and validation metrics and save as images
 plt.figure(figsize=(12, 6))
 
 # Plot training and validation loss
@@ -116,6 +118,7 @@ plt.title('Training and Validation Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.legend()
+plt.savefig('loss_plot.png')
 
 # Plot training and validation accuracy
 plt.subplot(1, 2, 2)
@@ -125,13 +128,11 @@ plt.title('Training and Validation Accuracy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.legend()
+plt.savefig('accuracy_plot.png')
 
 plt.tight_layout()
-plt.show()
 
-# Evaluate the model on the test data
-loss, accuracy = model.evaluate(x=test_features, y=y_test)
-print("Test Accuracy:", accuracy)
+# Save the plots
+plt.savefig('training_plots.png')
 
-# Save the model
-model.save("emotiondetector.h5")
+# Evaluate the model
