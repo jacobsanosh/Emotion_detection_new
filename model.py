@@ -105,7 +105,7 @@ model.add(Dense(7, activation='softmax'))
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model with augmented data and monitor metrics
-history = model.fit(datagen.flow(x=train_features, y=y_train, batch_size=128), epochs=100, validation_data=(test_features, y_test))
+history = model.fit(datagen.flow(x=train_features, y=y_train, batch_size=128), epochs=64, validation_data=(test_features, y_test))
 
 # Plot training and validation metrics and save as images
 plt.figure(figsize=(12, 6))
