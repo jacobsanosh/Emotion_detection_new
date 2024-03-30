@@ -180,7 +180,7 @@ model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = '
 # In[ ]:
 
 
-history=model.fit(x= x_train,y = y_train, batch_size = 128, epochs = 100, validation_data = (x_test,y_test)) 
+history=model.fit(x= x_train,y = y_train, batch_size = 128, epochs = 64, validation_data = (x_test,y_test)) 
 # Evaluate the model on the test data
 loss, accuracy = model.evaluate(x_test, y_test)
 
