@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+from keras.models import model_from_json
+import numpy as np
 from keras.utils import to_categorical 
 from keras_preprocessing.image import load_img
 from keras.models import Sequential
@@ -5,10 +8,9 @@ from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
 from keras.preprocessing.image import ImageDataGenerator
 import os
 import pandas as pd
-import numpy as np
 
-TRAIN_DIR='images/train'
-TEST_DIR='images/train'
+TRAIN_DIR = 'images/train'
+TEST_DIR = 'images/train'
 
 # Function to create DataFrame containing image paths and labels
 def createdataframe(dir):
@@ -100,8 +102,32 @@ model.add(Dense(7, activation='softmax'))
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-# Train the model with augmented data
-model.fit(datagen.flow(x=train_features, y=y_train, batch_size=128), epochs=100, validation_data=(test_features, y_test))
+# Train the model with augmented data and monitor metrics
+history = model.fit(datagen.flow(x=train_features, y=y_train, batch_size=128), epochs=64, validation_data=(test_features, y_test))
+
+# Plot training and validation metrics
+plt.figure(figsize=(12, 6))
+
+# Plot training and validation loss
+plt.subplot(1, 2, 1)
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Training and Validation Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+
+# Plot training and validation accuracy
+plt.subplot(1, 2, 2)
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Training and Validation Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
 
 # Evaluate the model on the test data
 loss, accuracy = model.evaluate(x=test_features, y=y_test)
