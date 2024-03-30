@@ -3,7 +3,6 @@
 
 # In[1]:
 
-
 from keras.utils import to_categorical 
 from keras_preprocessing.image import load_img
 from keras.models import Sequential
@@ -11,6 +10,7 @@ from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
 import os
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 """
 to_categorical  used convert an class label into categorical labels
 laod_img:used to load an image
@@ -267,9 +267,6 @@ print("model prediction is ",pred_label)
 
 # In[ ]:
 
-
-import matplotlib.pyplot as plt
-get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # In[ ]:
