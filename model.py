@@ -1,13 +1,12 @@
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # Set the backend to 'Agg' for non-interactive plotting
-from keras.models import model_from_json
-import numpy as np
-from keras.utils import to_categorical 
-from keras_preprocessing.image import load_img
-from keras.models import Sequential
+from keras.models import Sequential, model_from_json
 from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D
 from keras.preprocessing.image import ImageDataGenerator
+from keras.utils import to_categorical 
+from keras_preprocessing.image import load_img
+import numpy as np
 import os
 import pandas as pd
 
@@ -16,21 +15,21 @@ TEST_DIR = 'images/train'
 
 # Function to create DataFrame containing image paths and labels
 def createdataframe(dir):
-    image_paths=[]
-    labels=[]
+    image_paths = []
+    labels = []
     for label in os.listdir(dir):
-        for imagename in os.listdir(os.path.join(dir,label)):
-            image_paths.append(os.path.join(dir,label,imagename))
+        for imagename in os.listdir(os.path.join(dir, label)):
+            image_paths.append(os.path.join(dir, label, imagename))
             labels.append(label)
-        print(label,"completed")
-    return image_paths,labels
+        print(label, "completed")
+    return image_paths, labels
 
-train=pd.DataFrame()
-train['image'],train['label']=createdataframe(TRAIN_DIR)
+train = pd.DataFrame()
+train['image'], train['label'] = createdataframe(TRAIN_DIR)
 print(train)
 
-test=pd.DataFrame()
-test['image'],test['label']=createdataframe(TEST_DIR) 
+test = pd.DataFrame()
+test['image'], test['label'] = createdataframe(TEST_DIR) 
 print(test)
 
 # Function to extract features from images
@@ -105,34 +104,46 @@ model.add(Dense(7, activation='softmax'))
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model with augmented data and monitor metrics
-history = model.fit(datagen.flow(x=train_features, y=y_train, batch_size=128), epochs=64, validation_data=(test_features, y_test))
+history = model.fit(datagen.flow(x=train_features, y=y_train, batch_size=128), epochs=200, validation_data=(test_features, y_test))
 
-# Plot training and validation metrics and save as images
-plt.figure(figsize=(12, 6))
+# Save the model
+model_json = model.to_json()
+with open("emotiondetector.json", 'w') as json_file:
+    json_file.write(model_json)
+model.save("emotiondetector.h5")
 
-# Plot training and validation loss
-plt.subplot(1, 2, 1)
-plt.plot(history.history['loss'], label='Training Loss')
-plt.plot(history.history['val_loss'], label='Validation Loss')
-plt.title('Training and Validation Loss')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
-plt.legend()
-plt.savefig('loss_plot.png')
+# Load the saved model
+json_file = open("emotiondetector.json", "r")
+model_json = json_file.read()
+json_file.close()
+model = model_from_json(model_json)
+model.load_weights("emotiondetector.h5")
 
-# Plot training and validation accuracy
-plt.subplot(1, 2, 2)
-plt.plot(history.history['accuracy'], label='Training Accuracy')
-plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
-plt.title('Training and Validation Accuracy')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.legend()
-plt.savefig('accuracy_plot.png')
+# List of labels
+label = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
 
-plt.tight_layout()
+# Function to extract features from images
+def ef(image):
+    img = load_img(image, grayscale=True)
+    feature = np.array(img)
+    feature = feature.reshape(1, 48, 48, 1)
+    return feature / 255.0
 
-# Save the plots
-plt.savefig('training_plots.png')
+# Example inference with images
+images = [
+    'images/train/sad/42.jpg',
+    'images/train/fear/2.jpg',
+    'images/train/disgust/299.jpg',
+    'images/train/happy/7.jpg',
+    'images/train/surprise/15.jpg'
+]
 
-# Evaluate the model
+# Perform inference on each image
+for image_path in images:
+    print("Original image:", image_path)
+    img = ef(image_path)
+    pred = model.predict(img)
+    pred_label = label[pred.argmax()]
+    print("Model prediction:", pred_label)
+    plt.imshow(img.reshape(48, 48), cmap='gray')
+    plt.show()
