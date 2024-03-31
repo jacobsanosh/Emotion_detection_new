@@ -27,8 +27,8 @@ from tensorflow.keras.optimizers import Adam,RMSprop,SGD,Adamax
 # In[2]:
 
 
-train_dir = "../input/emotion-detection-fer/train" #passing the path with training images
-test_dir = "../input/emotion-detection-fer/test"   #passing the path with testing images
+train_dir = "images/train" #passing the path with training images
+test_dir = "images/test"   #passing the path with testing images
 
 
 # In[3]:
