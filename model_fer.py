@@ -23,6 +23,7 @@ from tensorflow.keras.applications import VGG16, InceptionResNetV2
 from keras import regularizers
 from tensorflow.keras.optimizers import Adam,RMSprop,SGD,Adamax
 import os
+from keras.layers import MaxPooling2D
 
 # Set CUDA_VISIBLE_DEVICES to an empty string
 os.environ['CUDA_VISIBLE_DEVICES'] = ''
