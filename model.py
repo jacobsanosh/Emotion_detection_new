@@ -28,7 +28,7 @@ os :used for interacting with the os
 
 
 TRAIN_DIR='images/train'
-TEST_DIR='images/train'
+TEST_DIR='images/test'
 
 
 # In[3]:
