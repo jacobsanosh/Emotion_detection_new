@@ -95,7 +95,8 @@ validation_generator = validation_datagen.flow_from_directory( directory = test_
 # In[6]:
 
 
-"""
+"""from keras.layers import MaxPooling2D
+
 Modeling
 
 
@@ -242,7 +243,7 @@ model.save('model_optimal.h5')
 # In[ ]:
 
 
-img = image.load_img("../input/emotion-detection-fer/test/happy/im1021.png",target_size = (48,48),color_mode = "grayscale")
+img = image.load_img("images/test/happy/im1021.png",target_size = (48,48),color_mode = "grayscale")
 img = np.array(img)
 plt.imshow(img)
 print(img.shape) #prints (48,48) that is the shape of our image
