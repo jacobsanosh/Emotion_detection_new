@@ -11,6 +11,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+os.environ['CUDA_VISIBLE_DEVICES'] = ''
 """
 to_categorical  used convert an class label into categorical labels
 laod_img:used to load an image
